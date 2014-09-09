@@ -164,7 +164,9 @@ module KnifeSolo
       begin
         try_connection
       rescue Errno::ETIMEDOUT
-        raise "Unable to connect to #{host}"
+        raise "Unable to connect to host '#{host}'"
+      rescue SocketError
+        raise "Unable to connect to host '#{host}'"
       rescue Net::SSH::AuthenticationFailed
         # Ensure the password is set or ask for it immediately
         password
