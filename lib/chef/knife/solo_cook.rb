@@ -33,10 +33,6 @@ class Chef
         :description => 'Skip the Chef version check on the node',
         :default     => true
 
-      option :skip_chef_check,
-        :long        => '--skip-chef-check',
-        :description => 'Deprecated. Replaced with --no-chef-check.'
-
       option :sync_only,
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
@@ -78,11 +74,6 @@ class Chef
 
       def run
         time('Run') do
-
-          if config[:skip_chef_check]
-            ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
-            config[:chef_check] = false
-          end
 
           validate!
 
