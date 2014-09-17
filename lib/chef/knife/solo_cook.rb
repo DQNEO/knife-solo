@@ -28,14 +28,6 @@ class Chef
 
       banner "knife solo cook [USER@]HOSTNAME [JSONFILE] (options)"
 
-      option :sync_only,
-        :long        => '--sync-only',
-        :description => 'Only sync the cookbook - do not run Chef'
-
-      option :sync,
-        :long        => '--no-sync',
-        :description => 'Do not sync kitchen - only run Chef'
-
       option :berkshelf,
         :long        => '--no-berkshelf',
         :description => 'Skip berks install'
@@ -74,15 +66,14 @@ class Chef
 
           ui.msg "Running Chef on #{host}..."
 
-          if config_value(:sync, true)
-            generate_node_config
-            berkshelf_install if config_value(:berkshelf, true)
-            librarian_install if config_value(:librarian, true)
-            patch_cookbooks_install
-            sync_kitchen
-            generate_solorb
-          end
-          cook unless config[:sync_only]
+          generate_node_config
+          berkshelf_install if config_value(:berkshelf, true)
+          librarian_install if config_value(:librarian, true)
+          patch_cookbooks_install
+          sync_kitchen
+          generate_solorb
+
+          cook
 
           clean_up if config[:clean_up]
         end
