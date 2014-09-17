@@ -46,10 +46,6 @@ class Chef
         :long        => '--format FORMATTER',
         :description => 'output format to use'
 
-      option :provisioning_path,
-        :long        => '--provisioning-path path',
-        :description => 'Where to store kitchen data on the node'
-
       option :clean_up,
         :long        => '--clean-up',
         :description => 'Run the clean command after cooking'
@@ -78,8 +74,7 @@ class Chef
       end
 
       def provisioning_path
-        # TODO ~ will likely break on cmd.exe based windows sessions
-        config_value(:provisioning_path, '~/chef-solo')
+        '~/chef-solo'
       end
 
       def sync_kitchen
