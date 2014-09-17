@@ -46,7 +46,7 @@ class Chef
 
           validate_ssh_options!
 
-          ui.msg "Running Chef on #{host}..."
+          ui.msg "knife solo cook on #{host}..."
 
           generate_node_config
           add_cookbook_path(patch_cookbooks_path)
