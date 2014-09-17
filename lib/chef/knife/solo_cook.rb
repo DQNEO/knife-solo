@@ -18,7 +18,6 @@ class Chef
       deps do
         require 'chef/cookbook/chefignore'
         require 'knife-solo'
-        require 'knife-solo/berkshelf'
         require 'erubis'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
@@ -26,10 +25,6 @@ class Chef
       end
 
       banner "knife solo cook [USER@]HOSTNAME [JSONFILE] (options)"
-
-      option :berkshelf,
-        :long        => '--no-berkshelf',
-        :description => 'Skip berks install'
 
       option :why_run,
         :short       => '-W',
@@ -58,7 +53,6 @@ class Chef
           ui.msg "Running Chef on #{host}..."
 
           generate_node_config
-          berkshelf_install if config_value(:berkshelf, true)
           add_cookbook_path(patch_cookbooks_path)
           sync_kitchen
           generate_solorb
@@ -172,11 +166,6 @@ class Chef
         start = Time.now
         yield
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
-      end
-
-      def berkshelf_install
-        path = KnifeSolo::Berkshelf.new(config, ui).install
-        add_cookbook_path(path) if path
       end
 
       def generate_solorb
