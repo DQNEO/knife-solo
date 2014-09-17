@@ -63,7 +63,7 @@ class Chef
 
           generate_node_config
           berkshelf_install if config_value(:berkshelf, true)
-          patch_cookbooks_install
+          add_cookbook_path(patch_cookbooks_path)
           sync_kitchen
           generate_solorb
 
@@ -274,9 +274,6 @@ class Chef
 
       protected
 
-      def patch_cookbooks_install
-        add_cookbook_path(patch_cookbooks_path)
-      end
     end
   end
 end
