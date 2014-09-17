@@ -19,7 +19,6 @@ class Chef
         require 'chef/cookbook/chefignore'
         require 'knife-solo'
         require 'knife-solo/berkshelf'
-        require 'knife-solo/librarian'
         require 'erubis'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
@@ -31,10 +30,6 @@ class Chef
       option :berkshelf,
         :long        => '--no-berkshelf',
         :description => 'Skip berks install'
-
-      option :librarian,
-        :long        => '--no-librarian',
-        :description => 'Skip librarian-chef install'
 
       option :why_run,
         :short       => '-W',
@@ -68,7 +63,6 @@ class Chef
 
           generate_node_config
           berkshelf_install if config_value(:berkshelf, true)
-          librarian_install if config_value(:librarian, true)
           patch_cookbooks_install
           sync_kitchen
           generate_solorb
@@ -187,11 +181,6 @@ class Chef
 
       def berkshelf_install
         path = KnifeSolo::Berkshelf.new(config, ui).install
-        add_cookbook_path(path) if path
-      end
-
-      def librarian_install
-        path = KnifeSolo::Librarian.new(config, ui).install
         add_cookbook_path(path) if path
       end
 
