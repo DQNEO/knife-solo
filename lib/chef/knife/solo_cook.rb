@@ -48,7 +48,7 @@ class Chef
       def run
         time('Run') do
 
-          validate!
+          validate_ssh_options!
 
           ui.msg "Running Chef on #{host}..."
 
@@ -61,10 +61,6 @@ class Chef
 
           clean_up if config[:clean_up]
         end
-      end
-
-      def validate!
-        validate_ssh_options!
       end
 
       def provisioning_path
