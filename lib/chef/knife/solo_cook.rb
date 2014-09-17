@@ -28,11 +28,6 @@ class Chef
 
       banner "knife solo cook [USER@]HOSTNAME [JSONFILE] (options)"
 
-      option :chef_check,
-        :long        => '--no-chef-check',
-        :description => 'Skip the Chef version check on the node',
-        :default     => true
-
       option :sync_only,
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
@@ -79,7 +74,6 @@ class Chef
 
           ui.msg "Running Chef on #{host}..."
 
-          check_chef_version if config[:chef_check]
           if config_value(:sync, true)
             generate_node_config
             berkshelf_install if config_value(:berkshelf, true)
@@ -261,16 +255,6 @@ class Chef
         cmd = cmd.flatten.compact
         Chef::Log.debug cmd.inspect
         system!(*cmd)
-      end
-
-      def check_chef_version
-        ui.msg "Checking Chef version..."
-        unless chef_version_satisfies? CHEF_VERSION_CONSTRAINT
-          raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
-        end
-        if node_environment != '_default' && chef_version_satisfies?('<11.6.0')
-          ui.warn "Chef version #{chef_version} does not support environments. Environment '#{node_environment}' will be ignored."
-        end
       end
 
       def chef_version_satisfies?(requirement)
