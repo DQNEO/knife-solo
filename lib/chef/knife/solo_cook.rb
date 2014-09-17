@@ -41,10 +41,6 @@ class Chef
         :long        => '--format FORMATTER',
         :description => 'output format to use'
 
-      option :clean_up,
-        :long        => '--clean-up',
-        :description => 'Run the clean command after cooking'
-
       def run
         time('Run') do
 
@@ -59,7 +55,6 @@ class Chef
 
           cook
 
-          clean_up if config[:clean_up]
         end
       end
 
@@ -242,14 +237,6 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
-      end
-
-      def clean_up
-        clean = SoloClean.new
-        clean.ui = ui
-        clean.name_args = @name_args
-        clean.config.merge! config
-        clean.run
       end
 
       protected
